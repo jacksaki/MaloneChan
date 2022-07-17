@@ -1,0 +1,105 @@
+﻿<UserControl
+    x:Class="MaloneChan.Views.EFCoreTestingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MaloneChan.Views"
+    xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="clr-namespace:MaloneChan.Views"
+    xmlns:vm="clr-namespace:MaloneChan.ViewModels"
+    xmlns:roslyn="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        <v:AsmToNameConverter x:Key="AsmToName" />
+        <v:AsmToPathConverter x:Key="AsmToPath" />
+        <v:AsmToFileConverter x:Key="AsmToFile" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ToolBar>
+            
+        </ToolBar>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Header="Imports">
+                    <ListBox ItemsSource="{Binding Parameter.Imports}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+                <GroupBox Grid.Column="1" Header="Assemblies">
+                    <ListBox ItemsSource="{Binding Parameter.References}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource AsmToName}}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+                <GroupBox Grid.Column="2" Header="ExternalAssemblies">
+                    <ListView ItemsSource="{Binding Parameter.ExternalAssemblies}">
+                        <ListView.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn Header="名前" DisplayMemberBinding="{Binding Converter={StaticResource AsmToName}}"/>
+                                    <GridViewColumn Header="ファイル" DisplayMemberBinding="{Binding Converter={StaticResource AsmToFile}}"/>
+                                </GridView.Columns>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </GroupBox>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="ソース">
+                <Grid>
+                    <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5" Style="{StaticResource MaterialDesignFloatingActionLightButton}" Command="{Binding ExecuteCommand}">
+                        <wpf:PackIcon Kind="LightningBolt" Width="28" Height="28"/>
+                    </Button>
+                </Grid>
+            </GroupBox>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <GroupBox Grid.Column="2" Header="Results">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox IsReadOnly="True" AcceptsReturn="True" Text="{Binding Result}"/>
+                    <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <TextBox IsReadOnly="True" AcceptsReturn="True" Text="{Binding Errors}"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>
